@@ -1,0 +1,66 @@
+POWER FLOW REPORT
+ 
+P S A T  2.1.8
+ 
+Author:  Federico Milano, (c) 2002-2013
+e-mail:  Federico.Milano@uclm.es
+website: http://www.uclm.es/area/gsee/Web/Federico
+ 
+File:  /Users/jdlara/Dropbox/MATLAB/ECE6613PD/PFproblem4/Midterm1
+Date:  18-Oct-2013 13:47:32
+
+
+NETWORK STATISTICS
+
+Buses:                        2          
+Lines:                        1          
+Generators:                   2          
+Loads:                        1          
+
+SOLUTION STATISTICS
+
+Number of Iterations:         3          
+Maximum P mismatch [p.u.]     0          
+Maximum Q mismatch [p.u.]     0          
+Power rate [MVA]              100        
+
+POWER FLOW RESULTS
+
+Bus         V           phase       P gen       Q gen       P load      Q load      
+            [p.u.]      [deg]       [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 1       1.1         10.4757     2           1.2834      0           0          
+Bus 2       1           0           1          -0.33235     3           0.4843     
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 1       Bus 2       1           2           1.2834      0           0.46669    
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 2       Bus 1       1          -2          -0.81665     0           0.46669    
+
+GLOBAL SUMMARY REPORT
+
+
+TOTAL GENERATION
+
+REAL POWER [p.u.]             3          
+REACTIVE POWER [p.u.]         0.95099    
+
+TOTAL LOAD
+
+REAL POWER [p.u.]             3          
+REACTIVE POWER [p.u.]         0.4843     
+
+TOTAL LOSSES
+
+REAL POWER [p.u.]             0          
+REACTIVE POWER [p.u.]         0.46669    
+

@@ -1,0 +1,71 @@
+POWER FLOW REPORT
+ 
+P S A T  2.1.8
+ 
+Author:  Federico Milano, (c) 2002-2013
+e-mail:  Federico.Milano@uclm.es
+website: http://www.uclm.es/area/gsee/Web/Federico
+ 
+File:  /Users/jdlara/Dropbox/MATLAB/ECE6613PD/PowerFlow/ThreeArea_mdl
+Date:  15-Oct-2013 18:46:08
+
+
+NETWORK STATISTICS
+
+Buses:                        3          
+Lines:                        3          
+Generators:                   2          
+Loads:                        1          
+
+SOLUTION STATISTICS
+
+Number of Iterations:         4          
+Maximum P mismatch [p.u.]     0          
+Maximum Q mismatch [p.u.]     0          
+Power rate [MVA]              100        
+
+POWER FLOW RESULTS
+
+Bus         V           phase       P gen       Q gen       P load      Q load      
+            [p.u.]      [rad]       [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Area 1      1           0           1.1152     -0.13529     0           0          
+Area 2      0.95       -0.00279     0.9        -2.9813      0           0          
+Area 3      1.0581     -0.05021     0           0           2.0152     -3.5665     
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Area 1      Area 2      1           0.05304     1.0001      0           0.05015    
+Area 1      Area 3      2           1.0622     -1.1354      0           0.12087    
+Area 3      Area 2      3          -0.95304     2.3103      0           0.27893    
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Area 2      Area 1      1          -0.05304    -0.94993     0           0.05015    
+Area 3      Area 1      2          -1.0622      1.2562      0           0.12087    
+Area 2      Area 3      3           0.95304    -2.0313      0           0.27893    
+
+GLOBAL SUMMARY REPORT
+
+
+TOTAL GENERATION
+
+REAL POWER [p.u.]             2.0152     
+REACTIVE POWER [p.u.]        -3.1166     
+
+TOTAL LOAD
+
+REAL POWER [p.u.]             2.0152     
+REACTIVE POWER [p.u.]        -3.5665     
+
+TOTAL LOSSES
+
+REAL POWER [p.u.]             0          
+REACTIVE POWER [p.u.]         0.44994    
+

@@ -1,0 +1,84 @@
+
+Clear
+
+!set datapath=C:\Users\Vladimir\Dropbox\2015_MINAE_GenDist\Gustavo\OPENDSS Example\
+
+new circuit.LV basekv= 138 pu= 1.0 angle=0 frequency=60 phases=3 Mvasc3=1656  Mvasc1=1000 
+
+!!!//////////////////////Transformadores
+!!!////Trafo de subestación///////////////////////////////
+new transformer.SS windings=2 buses=(Sourcebus,busbar) conns=(wye,wye) kvs= (138, 34.5) kvas=(25000,25000) %loadloss=0 xhl=2.5
+
+!!//////////Trafo mono////////////////////////////////////
+new transformer.LV1 phase=1 windings=3 Xhl=2.04 Xht=2.04 Xlt=1.36 %noloadloss=0.2  Buses=[A.1 B.1.0 B.0.2]  kVs=[19.9 0.12 0.12]  kvas=[50,50,50] %Rs=[0.6  1.2  1.2]  conns=[wye wye wye]
+
+/////Parametros de los cables
+New WireData.acsr336  Rac=0.188275 Runits=km GMRac=0.70104  GMRUnits=cm Radius=0.86868   Radunits=cm Normamps=570  Emergamps=570
+New WireData.acsr1/0  Rac=0.646847 Runits=km GMRac=0.13589  GMRUnits=cm Radius=0.50546   Radunits=cm Normamps=260  Emergamps=260
+
+new LineSpacing.Plano nconds=4 nphases=3 units=m   x=[-0.5   0  0.5 0]  h= [13.716  13.716  13.716 9]
+new LineSpacing.Vert1 nconds=3 nphases=2 units=m x=[0 0 0 ] h=[6.7 6.9 7.1 ] 
+
+New Linegeometry.G_336 nconds=4 nphases=3 spacing=Plano  wires= [acsr336 acsr336 acsr336 acsr336]
+Reduce=yes
+New Linegeometry.G_1/0 nconds=3 nphases=2 spacing=Vert1  wires= [acsr1/0 acsr1/0 acsr1/0]
+Reduce=yes
+
+New Linecode.tpx_4_oyster nphases=2  units=kft
+~ rmatrix=[0.6218 0.1140 | 0.1140 0.6218] 
+~ xmatrix=[0.2239 0.1927 | 0.1927 0.2239]
+~ Normamps=78  {78 1.25 *}
+
+
+!!//////////////////  LÍNEAS \\\\\\\\\\\\\\\\\\\\\
+
+new line.busbar-A bus1=busbar bus2=A Geometry=G_336 length=0.1  units=km 
+new line.B-C Bus1= B.1.2 Bus2=C.1.2 Geometry=G_1/0 length=1  units=m
+new line.Acometida  Bus1=C.1.2  Bus2=Cs1.1.2  linecode=tpx_4_oyster  length=15 units=m
+
+
+!!//////////////////////////CARGA///////////////////////////
+!! new load.C1ph1 bus1=Cs1.1.2 phases=1 kV= 0.240   model =1 conn=delta  kW=15 pf=1 status=fixed
+
+
+!!////////////////// CURVAS PARA PV \\\\\\\\\\\\\\\\\\\\\\
+
+!! Curva P-T [PU] del promedio de Pmpp vs temperatura (esta curva es para Pmpp para 25 °C)
+New XYCurve.MyPvsT npts=4 xarray=[0 25 75 100] yarray=[1.2 1.0 0.8 0.6]
+
+!!  Curva de eficiencia VS Potencia (en PU)
+New XYCurve.MyEff npts=4 xarray=[.1 .2 .4 1.0] yarray=[.86 .9 .93 .97]
+
+!! Curva de  Irradiancia [PU]
+New Loadshape.MyIrrad npts=24 interval=1 mult=[0 0 0 0 0 0 .1 .2 .3 .5 .8 .9 1.0 1.0 .99 .9 .7 .4 .1 0 0 0 0 0]
+
+!!  Curva de temperatura 24-hr
+New Tshape.MyTemp npts=24 interval=1 temp=[25, 25, 25, 25, 25, 25, 25, 25, 35, 40, 45, 50, 60, 60, 55, 40, 35, 30, 25, 25, 25, 25, 25, 25]
+
+
+!! definición del sistema PV
+New PVSystem.PV phases=1 bus1=Cs1.1.2 kV=0.240 kVA=5  PF=1 conn=wye
+~ irrad=1
+~ Pmpp=5  
+~ temperature=25
+~ effcurve=Myeff
+~ P-TCurve=MyPvsT
+~ Daily=MyIrrad 
+~ TDaily=MyTemp
+
+
+!set controlmode=static
+set mode= daily
+
+
+new monitor.PV_P PVSystem.PV 1 mode=1 ppolar=no
+new monitor.PV_V-I PVSystem.PV
+
+Solve
+
+
+show mon PV_P
+show mon PV_V-I
+
+
+

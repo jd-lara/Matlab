@@ -1,0 +1,93 @@
+EIGENVALUE REPORT
+ 
+P S A T  2.1.8
+ 
+Author:  Federico Milano, (c) 2002-2013
+e-mail:  Federico.Milano@uclm.es
+website: http://www.uclm.es/area/gsee/Web/Federico
+ 
+File:  /Users/jdlara/Dropbox/MATLAB/ECE6613PD/Project2/Base_14bus_lambda
+Date:  02-Nov-2013 11:04:51
+
+
+STATE MATRIX EIGENVALUES
+
+Eigevalue      Most Associated States      Real part      Imag. Part     Pseudo-Freq.   Frequency      
+
+Eig As #1      delta_Syn_1                 0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               delta_Syn_1    omega_Syn_1    e1q_Syn_1      e2q_Syn_1      e2d_Syn_1      
+
+Eig As #1      0.75607        0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               delta_Syn_2    omega_Syn_2    e1q_Syn_2      e1d_Syn_2      e2q_Syn_2      
+
+Eig As #1      0.09094        0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               e2d_Syn_2      delta_Syn_3    omega_Syn_3    e1q_Syn_3      e1d_Syn_3      
+
+Eig As #1      0              0.07819        0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               e2q_Syn_3      e2d_Syn_3      delta_Syn_4    omega_Syn_4    e1q_Syn_4      
+
+Eig As #1      0              0              0.03807        0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               e1d_Syn_4      e2q_Syn_4      e2d_Syn_4      delta_Syn_5    omega_Syn_5    
+
+Eig As #1      0              0              0              0.03673        0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               e1q_Syn_5      e1d_Syn_5      e2q_Syn_5      e2d_Syn_5      vm_Exc_1       
+
+Eig As #1      0              0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               vr1_Exc_1      vr2_Exc_1      vf_Exc_1       vm_Exc_2       vr1_Exc_2      
+
+Eig As #1      0              0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               vr2_Exc_2      vf_Exc_2       vm_Exc_3       vr1_Exc_3      vr2_Exc_3      
+
+Eig As #1      0              0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               vf_Exc_3       vm_Exc_4       vr1_Exc_4      vr2_Exc_4      vf_Exc_4       
+
+Eig As #1      0              0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               vm_Exc_5       vr1_Exc_5      vr2_Exc_5      vf_Exc_5       v1_Pss_1       
+
+Eig As #1      0              0              0              0              0             
+
+PARTICIPATION FACTORS (Euclidean norm)
+
+               v2_Pss_1       v3_Pss_1       
+
+Eig As #1      0              0             
+
+STATISTICS
+
+DYNAMIC ORDER                 52            
+# OF EIGS WITH Re(mu) < 0     0             
+# OF EIGS WITH Re(mu) > 0     0             
+# OF REAL EIGS                1             
+# OF COMPLEX PAIRS            0             
+# OF ZERO EIGS                1             
+

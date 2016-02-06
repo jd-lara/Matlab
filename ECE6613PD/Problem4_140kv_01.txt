@@ -1,0 +1,75 @@
+POWER FLOW REPORT
+ 
+P S A T  2.1.8
+ 
+Author:  Federico Milano, (c) 2002-2013
+e-mail:  Federico.Milano@uclm.es
+website: http://www.uclm.es/area/gsee/Web/Federico
+ 
+File:  /Users/jdlara/Dropbox/MATLAB/ECE6613PD/Problem4_140kv
+Date:  18-Sep-2013 10:17:02
+
+
+NETWORK STATISTICS
+
+Buses:                        4          
+Lines:                        3          
+Transformers:                 1          
+Generators:                   2          
+Loads:                        2          
+
+SOLUTION STATISTICS
+
+Number of Iterations:         4          
+Maximum P mismatch [p.u.]     0          
+Maximum Q mismatch [p.u.]     0          
+Power rate [MVA]              100        
+
+POWER FLOW RESULTS
+
+Bus         V           phase       P gen       Q gen       P load      Q load      
+            [p.u.]      [rad]       [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 01      1          -0.01044     0.6         0.71607     0           0          
+Bus 02      0.99738     0           1.2119      0.5         0           0          
+Bus 03      0.96565    -0.04781     0           0           0           0          
+Bus 04      0.92955    -0.14399     0           0           1.8         0.8719     
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 01      Bus 02      1          -0.20676     0.07582     0.00024     0.00236    
+Bus 02      Bus 03      2           1.0049      0.57347     0.00654     0.06538    
+Bus 01      Bus 03      3           0.80676     0.64025     0.00515     0.05153    
+Bus 03      Bus 04      4           1.8         1.0968      0           0.2249     
+
+LINE FLOWS
+
+From Bus    To Bus      Line        P Flow      Q Flow      P Loss      Q Loss      
+                                    [p.u.]      [p.u.]      [p.u.]      [p.u.]      
+
+Bus 02      Bus 01      1           0.207      -0.07347     0.00024     0.00236    
+Bus 03      Bus 02      2          -0.99839    -0.50809     0.00654     0.06538    
+Bus 03      Bus 01      3          -0.80161    -0.58871     0.00515     0.05153    
+Bus 04      Bus 03      4          -1.8        -0.8719      0           0.2249     
+
+GLOBAL SUMMARY REPORT
+
+
+TOTAL GENERATION
+
+REAL POWER [p.u.]             1.8119     
+REACTIVE POWER [p.u.]         1.2161     
+
+TOTAL LOAD
+
+REAL POWER [p.u.]             1.8        
+REACTIVE POWER [p.u.]         0.8719     
+
+TOTAL LOSSES
+
+REAL POWER [p.u.]             0.01193    
+REACTIVE POWER [p.u.]         0.34417    
+

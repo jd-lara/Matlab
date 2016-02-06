@@ -1,0 +1,47 @@
+C**********************************************************************
+C                           TITLE
+C
+HDG
+  UWPFLOW data file, WSCC format
+  Power Flow
+  Problem 4
+BAS
+C
+C**********************************************************************
+C 
+C                         AC BUSSES 
+C
+C                             | SHUNT |                       
+C  |Ow|Name   |kV |Z|PL  |QL  |MW |Mva|PM |PG  |QM  |Qm  |Vpu
+BQ  1 BUS  1   138 1    0    0   0   0   0   60  100 -1001.00
+BQ  1 BUS  2   138 1    0    0   0   0   0    0   50  -501.00
+B   1 BUS  3   138 1    0    0   0   0   0    0    0    01.00
+B   1 BUS  4    20 1  18087.18   0   0   0    0    0    01.00
+C
+C**********************************************************************
+C 
+C                         AC LINES
+C                         100 MVA base  
+C                 M            CS    N 
+C  |Ow|Name_1 |kV1||Name_2 |kV2|||In || R   | X   | G/2 | B/2 |Mil|
+L   1 BUS  1   138 BUS  2   1381 1   1 .005  .05  
+L   1 BUS  1   138 BUS  3   1381 1   1 .005  .05  
+L   1 BUS  2   138 BUS  3   1381 1   1 .005  .05  
+C
+C                               TRANSFORMERS
+C                             
+C                 M            CS
+C  |Ow|Name_1 |kV1||Name_2 |kV2|||In  | R   | X   | G   | B   |Tap1|Tap2|
+T   1 BUS  4    20 BUS  3   1381        0.    0.05             20.  138.
+C
+C
+C**********************************************************************
+C
+C                         SOLUTION CONTROL CARD
+C
+C        1         2         3         4         5         6         7         8
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+C                      |Max|  |SLACK BUS |
+C                      |Itr|  |Name   |kV|   |Angle    |
+SOL                       50  BUS  2   138       0.
+END

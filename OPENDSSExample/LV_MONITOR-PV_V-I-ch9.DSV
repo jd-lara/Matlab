@@ -1,0 +1,5 @@
+SetProp, 1E050,   -1E050, 1E050, -1E050, 16777215, 16777215, 0, 4
+Xlabel, "Time, H"
+Ylabel, "Mag"
+ChartCaption, "Mag"
+PctRim, 2
