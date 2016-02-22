@@ -44,22 +44,22 @@ void mexFunction(
   x=mxGetPr(prhs[1]);
 
   if (mxGetNumberOfElements(prhs[2])!=d)
-    mxErrMsgTxt("n has improper dimension");
+    mexErrMsgTxt("n has improper dimension");
   a=mxGetPr(prhs[2]);
   n=mxCalloc(d,sizeof(mwSize));
   for (i=0;i<d;i++) n[i]=(mwSize)a[i];
 
   if (mxGetNumberOfElements(prhs[3])!=d)
-    mxErrMsgTxt("a has improper dimension");
+    mexErrMsgTxt("a has improper dimension");
   a=mxGetPr(prhs[3]);
 
   if (mxGetNumberOfElements(prhs[4])!=d)
-    mxErrMsgTxt("b has improper dimension");
+    mexErrMsgTxt("b has improper dimension");
   b=mxGetPr(prhs[4]);
 
   N=1; for(i=0;i<d; i++) N *= n[i];
   if (mxGetM(prhs[0])!=N)
-    mxErrMsgTxt("c has improper number of rows");
+    mexErrMsgTxt("c has improper number of rows");
 
   plhs[0]=mxCreateDoubleMatrix(m,p,mxREAL);
 
