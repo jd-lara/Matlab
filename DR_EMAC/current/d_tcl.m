@@ -5,7 +5,7 @@ classdef d_tcl < device
     properties
         % Physical and behavioral properties
         beta % [$/(C)^2] Parameter that determines how consumers trade comfort v/s savings
-        Oobj % [C] Thermostat set point
+        Oobj % [C] Thermostat temperature target
         Omin % [C] Min temperature
         Omax % [C] Max temperature
         Pmin % [kW] Min power consumption
@@ -13,8 +13,11 @@ classdef d_tcl < device
         R    % [C/kW] Thermal resistance
         C    % [kWh/C] Thermal capacitance of the interior space  
         eta  % Heat rate (convetion: (+) for heating and (-) cooling)
-        Oout % Vector of outside temperatures.
-                        
+        Oout % [C] Vector of outside temperatures.
+        fuel % id of fuel type
+        comp % Whether the TCL belongs to a composite TCL. 1 True, 0 False
+        cont_ex % Matrix of device contribution to input fuel consumption
+
         % Other parameters
         O    % Temperature function
         
@@ -39,7 +42,7 @@ classdef d_tcl < device
     
     methods
         function obj = d_tcl(par, beta, Oobj, Omin, Omax, Pmin, Pmax, R, ...
-                           C, eta, Oout, label)
+                             C, eta, Oout, label, fuel, comp)
             if nargin > 0
                 obj.par   = par;
                 obj.beta  = beta;
@@ -48,40 +51,49 @@ classdef d_tcl < device
                 obj.Omax  = Omax;
                 obj.Pmin  = Pmin;
                 obj.Pmax  = Pmax;
-                obj.Pmin  = Pmin;
                 obj.R     = R;
                 obj.C     = C;
                 obj.eta   = eta;
                 obj.Oout  = Oout;
                 obj.label = label;
-                obj.affects_utility = 1;
-                obj.affects_constraint = 1;
-                obj.mathpar = p_mathpar();
-                obj.gen_temp_transform();
-                obj.gen_utility();
-                obj.gen_constraint_set();
-                obj.mathpar.set_S(eye(par.TW));
+                obj.fuel  = fuel;
+                obj.comp  = comp;
+                if not(comp)
+                    obj.affects_utility = 1;
+                    obj.affects_constraint = 1;
+                    nfuel = obj.par.nfuel;
+                    obj.cont_ex = zeros(nfuel,1);
+                    obj.cont_ex(obj.fuel) = 1;
+                    obj.mathpar = p_mathpar();
+                    obj.gen_temp_transform();
+                    obj.gen_utility();
+                    obj.gen_constraint_set();                    
+                end
             end
         end
         function obj = replicate(obj1)
             obj = d_tcl();
-            obj.par                = obj1.par;
-            obj.beta               = obj1.beta;
-            obj.Oobj               = obj1.Oobj;
-            obj.Omin               = obj1.Omin;
-            obj.Omax               = obj1.Omax;
-            obj.Pmin               = obj1.Pmin;
-            obj.Pmax               = obj1.Pmax;
-            obj.Pmin               = obj1.Pmin;
-            obj.R                  = obj1.R;
-            obj.C                  = obj1.C;
-            obj.eta                = obj1.eta;
-            obj.Oout               = obj1.Oout;
-            obj.label              = obj1.label;
-            obj.affects_utility    = 1;
-            obj.affects_constraint = 1;
-            obj.mathpar            = obj1.mathpar;
-            obj.O                  = obj1.O;
+            obj.par   = obj1.par;
+            obj.beta  = obj1.beta;
+            obj.Oobj  = obj1.Oobj;
+            obj.Omin  = obj1.Omin;
+            obj.Omax  = obj1.Omax;
+            obj.Pmin  = obj1.Pmin;
+            obj.Pmax  = obj1.Pmax;
+            obj.R     = obj1.R;
+            obj.C     = obj1.C;
+            obj.eta   = obj1.eta;
+            obj.Oout  = obj1.Oout;
+            obj.label = obj1.label;
+            obj.fuel  = obj1.fuel;
+            obj.comp  = obj1.comp;
+            if not(obj1.comp)
+                obj.affects_utility    = 1;
+                obj.affects_constraint = 1;
+                obj.cont_ex            = obj1.cont_ex;
+                obj.mathpar            = obj1.mathpar;
+                obj.O                  = obj1.O;                 
+            end
         end    
         function gen_temp_transform(obj)
             % This function defines the relationship between power and
@@ -131,13 +143,17 @@ classdef d_tcl < device
             obj.mathpar.set_b([Omax*e - O2 ; - Omin*e + O2; Pmax*e  ; - Pmin*e]);            
         end
         function dim = get_dim(obj)      
-            % Provides the dimension of the demand vector
-            dim = size(obj.mathpar.S,2);
+            % Provides the dimension of the variables of the TCL
+            dim = obj.par.TW;
         end
-        function set_sol(obj, ds)        
+        function set_sol(obj, ds, Os)        
             % Generates solution profile for the device
             obj.ds = ds;
-            obj.Os = obj.O.gen_temp(ds);
+            if nargin > 2
+                obj.Os = Os;
+            else    
+                obj.Os = obj.O.gen_temp(ds);
+            end
         end
         % Useful for debugging
         function print_summary(obj)

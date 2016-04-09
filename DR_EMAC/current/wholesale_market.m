@@ -69,7 +69,36 @@ classdef wholesale_market < handle
                 end
                
             end
-        end    
+        end
+        function find_equilibrium_prices(obj, a)
+            % Find welfare maximizing price equilibrium given a
+            % vector of alphas.
+            display('starting wholesale price search...')
+            
+            % call optimization in the space of lambda
+            l0 = ones(obj.par.TW,1);
+            options = optimoptions(@fmincon,'Algorithm','interior-point', ...
+                                   'MaxIter',15*10^4,'MaxFunEvals',10^8, ...
+                                   'Display','iter',...
+                                   'GradObj','on','TolX',10^(-8), ...
+                                   'TolFun',1.0e-08, ...
+                                   'Hessian','lbfgs');         
+            [l, fval, exitflag, output] = fmincon(@(l)objfun(l, obj),l0,...
+                                                  [],[],[],[],[],[],[],options);
+
+            sol.update_master(l, fval, exitflag, output);
+
+                function [f, df] = objfun(l, obj)
+
+                    % Update parameters and solve new welfare maximization problem.
+                    par.update_demand_parameters(a, lse);           
+                    solve_wmax(par, sol);
+
+                    % set objective function and gradient
+                    f = - sol.gen_objective(par);
+                    df = - sol.gen_gradient(par, lse);
+                end
+        end
     end
     
 end

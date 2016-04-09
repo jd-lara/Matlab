@@ -4,7 +4,14 @@ classdef (Abstract) device < handle & matlab.mixin.Heterogeneous
     
     properties (Abstract)
         % Physical and behavioral properties
-        % (Have to be defined per each device)
+        cont_ex % Matrix of devices contribution to input fuel consumption
+                % In position ij it has:
+                %  1 if the device j consumes fuel i
+                %  0 if the device j neither consumes nor produces fuel i
+                % -1 if the device j produces fuel i
+                % Obs: We consider that a battery storage system has two
+                % devices one that consumes an other that produces
+                % electrcity.                
                         
         % Math model parameters
         mathpar    
@@ -27,8 +34,6 @@ classdef (Abstract) device < handle & matlab.mixin.Heterogeneous
                                 % associated to the device.
         gen_constraint_set(obj) % Generates the constraint set associated
                                 % to the device.
-        dim = get_dim(obj)      % Provides the dimension of the demand vector
-        set_sol(obj, ds)        % Set solution profile for the device
         % Useful for debugging
         print_summary(obj)      % Print relevant profiles of the device
                                

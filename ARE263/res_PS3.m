@@ -1,4 +1,4 @@
-function resid_PS3 = res_PS3(c, tnodes, T, n, x_ss, fspace, eta, rho, kappa,...
+ function resid_PS3 = res_PS3(c, tnodes, T, n, x_ss, fspace, eta, rho, kappa,...
                              delta, g, L, k0)
 
  %This line makes sure that the c vector has the correct shape to be used
@@ -12,8 +12,8 @@ function resid_PS3 = res_PS3(c, tnodes, T, n, x_ss, fspace, eta, rho, kappa,...
  x_p = funeval(c,fspace,tnodes,1);
  
  %Vector representation of F(X)
- kk = [(x(:,1)./eta).*((L^(1-kappa)*kappa)*x(:,2).^(kappa-1)-rho-(delta+g)),... 
-       x(:,2).^(kappa)*L^(1-kappa)-x(:,1)+(delta+g)*x(:,1)];
+ kk = [(x(:,1)./eta).*((L^(1-kappa)*kappa)*x(:,2).^(kappa-1)-rho-(delta+eta*g)),... 
+       x(:,2).^(kappa)*L^(1-kappa)-x(:,1)-(delta+g)*x(:,2)];
  
 resid_PS3 = x_p - kk;
 

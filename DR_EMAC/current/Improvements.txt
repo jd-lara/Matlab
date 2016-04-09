@@ -1,3 +1,5 @@
 1. Currently the indexes of the output in the DB do not conincide with the indexes of the imput. This is because the idex of the different objects in the is just a correlative and it is not necesarily the same as in the DB. This can be easily corrected by adding indexes to the object in the code and then printing those indexes.
 
+2. Work on the DB, BASELINE_PARAM not yet ready.
+
 

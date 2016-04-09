@@ -1,0 +1,4 @@
+1. Check max and min of the demand time serie. There cannot be zero values.
+Action: In case there are zero values, I am replacing that point (hour and day) with the average of the previous and following 10 days. 
+
+2. If there are simulation with strange values, one can check wehther the same result holds running the problematic simulation independently. I have been able to debug several mistakes in this way.

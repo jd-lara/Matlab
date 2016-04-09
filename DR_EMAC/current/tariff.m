@@ -16,7 +16,7 @@ classdef (Abstract) tariff < handle & matlab.mixin.Heterogeneous
         obj = replicate(obj)    % generates a replica of the object
                                 % attributes point to the original tariff
                                 % This helps saving memory
-        set_sol(obj, sol)    
+        set_sol(obj, sol)
     end
     methods (Static, Sealed, Access = protected)  
         function default_object = getDefaultScalarElement

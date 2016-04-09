@@ -21,10 +21,11 @@ classdef t_two_part < tariff
     
     methods
         
-        function obj = t_two_part(M, O, label, par, p, F)
+        function obj = t_two_part(M, label, par, p, F)
             if nargin > 0
                 obj.mathpar = p_mathpar();
                 obj.mathpar.set_M(M);
+                O = size(M,2);
                 obj.mathpar.set_O(O);
                 obj.label = label;
                 obj.par = par;
@@ -63,7 +64,7 @@ classdef t_two_part < tariff
         end
         function O = get_O(obj)
             O = obj.mathpar.O;
-        end
+        end  
     end
     
 end

@@ -10,7 +10,8 @@ classdef d_bss < device
         SOC_min % [kWh] Minimum state of charge of the BSS
         Pmax    % [kW] Max power consumption
         S_0     % [kWh] Initial state of charge of the BSS 
-        
+        cont_ex % Matrix of device contribution to input fuel consumption
+                
         % Math model parameters
         mathpar % Parameters of the mathematical model
         
@@ -46,22 +47,26 @@ classdef d_bss < device
                 obj.affects_constraint = 1;
                 obj.mathpar = p_mathpar();
                 obj.gen_constraint_set();
-                obj.mathpar.set_S([eye(par.TW),-eye(par.TW)]);
+                nfuel = obj.par.nfuel;
+                obj.cont_ex = zeros(nfuel,2);
+                obj.cont_ex(1,1) =  1;
+                obj.cont_ex(1,2) = -1;
             end
         end        
-        function obj1 = replicate(obj)
-            obj1 = d_bss();
-            obj1.par      = obj.par;
-            obj1.Pmax     = obj.Pmax;
-            obj1.SOC_max  = obj.SOC_max;
-            obj1.SOC_min  = obj.SOC_min;
-            obj1.eta_out  = obj.eta_out;
-            obj1.eta_in   = obj.eta_in;
-            obj1.S_0      = obj.S_0;
-            obj1.label    = 'bss';
-            obj1.affects_utility = 0;
-            obj1.affects_constraint = 1;
-            obj1.mathpar = obj.mathpar;
+        function obj = replicate(obj1)
+            obj = d_bss();
+            obj.par                = obj1.par;
+            obj.Pmax               = obj1.Pmax;
+            obj.SOC_max            = obj1.SOC_max;
+            obj.SOC_min            = obj1.SOC_min;
+            obj.eta_out            = obj1.eta_out;
+            obj.eta_in             = obj1.eta_in;
+            obj.S_0                = obj1.S_0;
+            obj.label              = 'bss';
+            obj.affects_utility    = 0;
+            obj.affects_constraint = 1;
+            obj.mathpar            = obj1.mathpar;
+            obj.cont_ex            = obj1.cont_ex;
         end
         function gen_utility(obj)
         end    
@@ -102,7 +107,7 @@ classdef d_bss < device
         end    
         function dim = get_dim(obj)      
             % Provides the dimension of the demand vector
-            dim = size(obj.mathpar.S,2);
+            dim = 2*obj.par.TW;
         end
         function set_sol(obj, ds)        
             % Generates solution profile for the device

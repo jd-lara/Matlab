@@ -6,6 +6,8 @@
 % +g)]
 % \dot k = k^{\kappa} L^{1 - \kappa} - c - (\delta + g) k
 %
+%Requires the files Ramsey_ss.m and res_PS3.m
+%
 %The code cycles through Chebyschev and Spline basis functions, considering
 %the polynomial orders stored in the vector order. All the results are
 %stored in the structure log. 
@@ -33,7 +35,7 @@ k0 = 80;
 % the x vector is x = [c , k], x_ss is the value in steady state of the
 % variables. 
 x_ss = fsolve(@(x) Ramsey_ss(x,eta, rho, kappa, delta,...
-            g, L), [80;21], opt);        
+            g, L), [10;10], opt);        
 
         
 fprintf('The solution to the capital stock in steady state is %f\n',...
@@ -48,7 +50,7 @@ basis_fun = {'cheb','spli'};% Specify the basis function
 T = 50;                      %Limit of the time domain, assuming that the 
                              %interval is [0,T]
 
-order = [5, 6, 8, 10, 15, 17, 20];      %order of the polynominals
+order = [6, 10, 20];      %order of the polynominals
 
 log = struct;               %This structure will store the results from the
                             %different cases tested. 
@@ -129,6 +131,7 @@ for basis = [1, 2]
         
     end
 end
+
 
 %%
 

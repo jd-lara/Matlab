@@ -13,6 +13,7 @@ classdef d_baseline < device
         ope % Own price elasticty
         d0  % [kWh] Demand baseline (vector TW)
         p0  % [$/kWh] Price vector faced by the customer when d0 happens
+        cont_ex % Matrix of device contribution to input fuel consumption
         
         % Math model parameters
         mathpar % Parameters of the mathematical model
@@ -43,19 +44,22 @@ classdef d_baseline < device
                 obj.affects_constraint = 0;
                 obj.mathpar = p_mathpar();
                 obj.gen_utility();
-                obj.mathpar.set_S(eye(par.TW));
+                nfuel = obj.par.nfuel;
+                obj.cont_ex = zeros(nfuel,1);
+                obj.cont_ex(1) = 1;
             end
         end
-        function obj1 = replicate(obj)
-            obj1 = d_baseline();
-            obj1.ope = obj.ope;
-            obj1.d0  = obj.d0;
-            obj1.p0  = obj.p0;
-            obj1.par = obj.par;
-            obj1.label = 'baseline';
-            obj1.affects_utility = 1;
-            obj1.affects_constraint = 0;
-            obj1.mathpar = obj.mathpar;           
+        function obj = replicate(obj1)
+            obj                    = d_baseline();
+            obj.ope                = obj1.ope;
+            obj.d0                 = obj1.d0;
+            obj.p0                 = obj1.p0;
+            obj.par                = obj1.par;
+            obj.label              = 'baseline';
+            obj.affects_utility    = 1;
+            obj.affects_constraint = 0;
+            obj.mathpar            = obj1.mathpar;           
+            obj.cont_ex            = obj1.cont_ex;
         end
         function gen_utility(obj)
             U = sparse(diag(0.5*(obj.p0 ./ obj.d0)/obj.ope));
@@ -68,7 +72,7 @@ classdef d_baseline < device
         end 
         function dim = get_dim(obj)      
             % Provides the dimension of the demand vector
-            dim = size(obj.mathpar.S,2);
+            dim = obj.par.TW;
         end
         function set_sol(obj, ds)        
             % Generates solution profile for the device

@@ -8,16 +8,13 @@ classdef p_mathpar < handle
         u     % Linear term in the utility function
         A     % Matrix of the constraint set
         b     % Vector of the constraint set
-        S     % Matrix of contribution to total power consumption 
         d     % Aggregated exogenous demand
         % Two-part tariffs parameters
-        M     % Converts from O dimensional to TW dimensional
-        O     % Number of time windows for the customers
+        M     % Converts from O dimensional to nfuel*TW dimensional
+        O     % Number of different vairiable charges
     end
     
     methods
-        function obj = p_mathpar()
-        end
         function set_U(obj, U)
             obj.U = sparse(U);
         end
@@ -29,9 +26,6 @@ classdef p_mathpar < handle
         end
         function set_b(obj, b)
             obj.b = sparse(b);
-        end
-        function set_S(obj, S)
-            obj.S = sparse(S);
         end
         function set_d(obj, d)
             obj.d = sparse(d);

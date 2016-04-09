@@ -18,6 +18,7 @@ classdef parameters < handle
         K         % # of supply-side technologies. 
         W         % # of states of the world.
         T         % # of periods.
+        nfuel     % # of fuels types considered in the instance.
         % Auxiliar parameters
         e         % Vector of ones dimension TW.
         eRPS      % Vector for dim K with 1 if tech k receives RPS credit.    
@@ -31,25 +32,26 @@ classdef parameters < handle
     end
     
     methods
-        function obj = parameters(z, c, ro, r, K, W, T, eRPS, THETA, a0, ub)
-            obj.z    = z;
-            obj.c    = c;
-            obj.ro   = ro;
-            obj.r    = r;
-            obj.K    = K;
-            obj.W    = W;
-            obj.T    = T;
-            obj.a0   = a0;
-            obj.ub   = ub;
-            obj.TW   = T*W; obj.TWK = obj.TW*K;
-            obj.e    = ones(obj.TW,1); 
-            ek       = ones(1,obj.K);
-            ed       = ones(1,THETA);
-            obj.eRPS = eRPS;
-            obj.SY   = sparse(kron(ek,eye(obj.TW)));
-            obj.SD   = sparse(kron(ed,eye(obj.TW)));
-            obj.SR   = sparse(kron(eRPS',eye(obj.TW)));
-            obj.H    = sparse(kron(eye(obj.K),obj.e).*repmat(ro,[1 K]));
+        function obj = parameters(z, c, ro, r, K, W, T, eRPS, THETA, a0, ub, nf)
+            obj.z     = z;
+            obj.c     = c;
+            obj.ro    = ro;
+            obj.r     = r;
+            obj.K     = K;
+            obj.W     = W;
+            obj.T     = T;
+            obj.nfuel = nf;
+            obj.a0    = a0;
+            obj.ub    = ub;
+            obj.TW    = T*W; obj.TWK = obj.TW*K;
+            obj.e     = ones(obj.TW,1); 
+            ek        = ones(1,obj.K);
+            ed        = ones(1,THETA);
+            obj.eRPS  = eRPS;
+            obj.SY    = sparse(kron(ek,eye(obj.TW)));
+            obj.SD    = sparse(kron(ed,eye(obj.TW)));
+            obj.SR    = sparse(kron(eRPS',eye(obj.TW)));
+            obj.H     = sparse(kron(eye(obj.K),obj.e).*repmat(ro,[1 K]));
         end
         function set_O(obj, lse)
             % Computes the number of time-windows across all tariffs

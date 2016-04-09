@@ -6,6 +6,7 @@ classdef customer < handle
         % Customer devices
         devices % Array of devices owned by customer
         ndev    % Number of devices
+        cont_ex % Matrix of devices contribution to input fuel consumption
         
         % Math model parameters
         mathpar % mathematical parameters
@@ -26,8 +27,7 @@ classdef customer < handle
                 obj.ndev = size(devices,2);
                 obj.par = par;
                 obj.mathpar = p_mathpar();
-                obj.gen_model_param();     
-                obj.dim = size(obj.mathpar.S,2);
+                obj.gen_model_param();
                 if isempty(obj.mathpar.A)
                     obj.dim_c = 0;
                 else
@@ -47,19 +47,18 @@ classdef customer < handle
             obj1.mathpar = obj.mathpar;
             obj1.dim   = obj.dim;
             obj1.dim_c = obj.dim_c;
+            obj1.cont_ex = obj.cont_ex;
         end    
         function gen_model_param(obj)
             rows1 = 0;            % Rows of U, u
             rows2 = 0; cols2 = 0; % Rows of A, b and cols of A
-            cols3 = 0;            % Cols of S (rows are just TW)
+            TW = obj.par.TW;
             
             % Computing matrix dimensions
             for k = 1:obj.ndev
                 dev = obj.devices(k);
                 ind = dev.affects_utility + dev.affects_constraint;
                 if ind >= 1
-                    dims = size(dev.mathpar.S);
-                    cols3 = cols3 + dims(2);
                     if dev.affects_constraint
                         dims = size(dev.mathpar.A);
                         rows2 = rows2 + dims(1);
@@ -77,21 +76,21 @@ classdef customer < handle
             u = zeros(rows1,1);
             A = zeros(rows2,cols2);
             b = zeros(rows2,1);
-            S = zeros(obj.par.TW,cols3);
             d = zeros(obj.par.TW,1);
+            nfuel = obj.par.nfuel;
+            obj.cont_ex = zeros(nfuel,1);
+            obj.dim = cols2;
+            obj.dim_c = rows2;
             
             r_fin1 = 0;
-            r_fin2 = 0; c_fin2 = 0;
-            c_fin3 = 0;
+            r_fin2 = 0; c_fin2 = 0;            
             
             % Creating customer parameters U, u, A, b, S, d
             for k = 1:obj.ndev
                 dev = obj.devices(k);
                 ind = dev.affects_utility + dev.affects_constraint;
                 if ind >= 1
-                    dims = size(dev.mathpar.S);
-                    c_ini3 = c_fin3 + 1; c_fin3 = c_fin3 + dims(2);
-                    S(1:obj.par.TW,c_ini3:c_fin3) = dev.mathpar.S;
+                    obj.cont_ex = [obj.cont_ex, dev.cont_ex];
                     if dev.affects_constraint
                         dims = size(dev.mathpar.A);                        
                         r_ini2 = r_fin2 + 1; r_fin2 = r_fin2 + dims(1);
@@ -121,12 +120,13 @@ classdef customer < handle
             obj.mathpar.set_b(b);
             obj.mathpar.set_U(U);
             obj.mathpar.set_u(u);
-            obj.mathpar.set_S(S);
             obj.mathpar.set_d(d);
+            n = size(obj.cont_ex,2);
+            obj.cont_ex = obj.cont_ex(:,2:n);
         end
         function set_sol(obj, d)
             % Generates power and other metrics profiles for the devices
-            fin = 0; ini = 0;
+            fin = 0; 
             for k = 1:obj.ndev
                 ini = fin + 1;
                 dev = obj.devices(k);
@@ -137,8 +137,20 @@ classdef customer < handle
                     obj.devices(k).set_sol(d(ini:fin));
                 end
             end
+            
             % Aggregated demand
-            obj.ds = obj.mathpar.S*d + obj.mathpar.d;
+            TW = obj.par.TW;
+            nfuel = obj.par.nfuel;
+            obj.ds = zeros(TW,nfuel);
+            I = eye(obj.par.TW);
+            for f = 1:nfuel
+                S = kron(obj.cont_ex(f,:),I);
+                if f == 1
+                    obj.ds(:,f) = S*d + obj.mathpar.d;
+                else
+                    obj.ds(:,f) = S*d;    
+                end
+            end
         end
         function U = get_U(obj)
             U = obj.mathpar.U;
@@ -154,10 +166,12 @@ classdef customer < handle
         end
         function d = get_d(obj)
             d = obj.mathpar.d;
-        end
+        end 
         function S = get_S(obj)
-            S = obj.mathpar.S;
-        end                
+            I = eye(obj.par.TW);
+            S = kron(obj.cont_ex,I);
+            S = sparse(S);
+        end
     end
     
 end
