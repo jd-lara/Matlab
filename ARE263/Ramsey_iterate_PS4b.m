@@ -1,4 +1,4 @@
-function [consum,value,c,B,logical_converged,it] = Ramsey_iterate_PS4(uncertainty_flag, maxit,tol,damp,k_nodes,value,consum,c)
+function [consum,value,c,B,logical_converged,it] = Ramsey_iterate_PS4b(uncertainty_flag, maxit,tol,damp,nodes,value,consum,c)
 
 % Iterates over function approximations in recursive ramsey growth problem
 % logical_converged==1 if converged.
@@ -8,11 +8,14 @@ function [consum,value,c,B,logical_converged,it] = Ramsey_iterate_PS4(uncertaint
 % The outer loop stops when coefficients stay within tolerance "tol" or
 % when reaching max # of iterations "maxit"
 
-global fspace kappa L options delta consum_min w e sigma
+global fspace kappa L options delta consum_min w sigma
 
 
 
-num_nodes = length(k_nodes);
+num_nodes = length(nodes{1});
+%Separate the nodes 
+k_nodes = nodes{1};
+e_nodes = nodes{2};
 
 %Initialization
 logical_converged = 0; % if =1 on output then converged
@@ -41,17 +44,22 @@ for it = 1:maxit
 %%%%%%%%%%%%%%%%% Changes by JDLA to comply with PS4-3b and PS4-3c)%%%%%%%%
 if uncertainty_flag==1
 
-disp(['Solving the model with uncertainty considering ' num2str(numel(w)) ' and standard deviation ' num2str(sigma)])  
+disp(['Solving the model with uncertainty considering ' num2str(numel(w)) ' shocks and standard deviation ' num2str(sigma)])  
 
+index = 1;
 for i = 1:num_nodes
-    index = i;
+    index_k = i;
+    for j = 1:num_nodes
+    index_e = j;
     
+    disp(k_nodes(index_k))
+    disp(e_nodes(index_e))
     % maximization step, define the r.h.s. of Bellman as the objective
-    val_handle_u = @(cons) Ramsey_bellman_u_PS4(c,cons,k_nodes(index));
+    val_handle_u = @(cons) Ramsey_bellman_PS4b(c,cons, k_nodes(index_k), e_nodes(index_e));
     
     % Constraints:
     % Production given current capital stock
-    production = k_nodes(index).^kappa.*L.^(1-kappa);
+    production = k_nodes(index_k).^kappa.*L.^(1-kappa);
     % I will use production as the max consumption constraint.
     % Alternative formulation: Allow agent to additionally eat up left-over capital from last period
     %production = k_nodes(i).^kappa.*L.^(1-kappa)+(1-delta)*k_nodes(i);
@@ -60,19 +68,22 @@ for i = 1:num_nodes
     % passing over: objective, starting values for optimal consumption search, and
     % constraints: 4 empty, lower bound, upper bound, empty, options specified in main file
     [consum_new,value_new] = fmincon(val_handle_u,consum(index),[],[],[],[],consum_min,production,[],options);
-    
     % save results of maximization step at present node
     consum(index) = consum_new;
     value(index) = -value_new;  % solver minimizes rather than maximizes
     
+    index = index+1;
+    
+    end
 end
 
 else
-    disp(['Solving the deterministic model'])  
+    disp('Solving the deterministic model')  
     for i = 1:num_nodes
         index = i;
         
-        % maximization step, define the r.h.s. of Bellman as the objective
+        % maximization step, define the r.h.s. of Bellman as the
+        objective0i89m 
         val_handle_u = @(cons) Ramsey_bellman_PS4(c,cons,k_nodes(index));
         
         % Constraints:
@@ -86,6 +97,7 @@ else
         % passing over: objective, starting values for optimal consumption search, and
         % constraints: 4 empty, lower bound, upper bound, empty, options specified in main file
         [consum_new,value_new] = fmincon(val_handle_u,consum(index),[],[],[],[],consum_min,production,[],options);
+        
         
         % save results of maximization step at present node
         consum(index) = consum_new;
@@ -103,12 +115,13 @@ end
     % collocation function, given the outcome of the utility maximization
     if it==1
         % B: can save time through the (optional) saving of the basis matrix B
-        [c_new B] = funfitxy(fspace, k_nodes, value);
+        [c_new B] = funfitxy(fspace, nodes, value);
     else
         % B: now I already have basis structure B and reuse it (more efficient)
         %[c_new] = funfitxy(fspace, B, value);
-        [c_new] = funfitxy(fspace, k_nodes, value);
+        [c_new] = funfitxy(fspace, nodes, value);
     end
+   
     
     % Sometimes more stable not to update coefficients all the way, particularly useful if 
     % there might be a danger of alternating around the correct value (damp=0 usual full updating)
@@ -149,8 +162,4 @@ end
     
 end % end of function iteration loop (go back to next guess unless break criterion satisfied)
 
-
-
-
-end % end of function
 
