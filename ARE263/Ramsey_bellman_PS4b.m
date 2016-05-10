@@ -14,13 +14,9 @@ e_i_next = z*e_i + v(i);
 
 k_i_next = ((1-delta)*k_i + k_i.^kappa.*L.^(1-kappa) - cons).*exp(-g)*e_i;
 
-disp(e_i_next)
-
 % Calculate the expecte value function in the next period, i.e EV(k_(t+1)
 
 value_next_int(i) = ((1-eta)*funeval(coeff,fspace,[k_i_next, e_i_next]))^(1-gamma);
-
-disp(value_next_int)
 
 end
 

@@ -1,5 +1,5 @@
-load scenarios.mat
-
+%load scenarios.mat
+close all;
 %extend scenarios and ruc 
 kt=numel(Realization);
 
@@ -14,7 +14,7 @@ k=1;
 % k=1;    
 % end
 
-Ruc=RUC';
+%Ruc=RUC';
 RUC_extended=zeros(4,kt);
 
 for n=1:4
@@ -30,7 +30,9 @@ Realization=[Realization;Realization(1:2)];
 
 %plot(scenarios_extended','k'); hold on
 plot(Realization)'; hold on;
-plot(RUC_extended(2:end,:)', 'r')
+plot(RUC_extended(2,:)', 'r')
+plot(RUC_extended(3,:)', 'b')
+plot(RUC_extended(4,:)', 'k')
 plot(RUC_extended(1,:)', 'g')
 
 scenarios_extended=scenarios_extended';

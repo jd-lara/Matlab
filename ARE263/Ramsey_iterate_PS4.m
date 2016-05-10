@@ -59,7 +59,7 @@ for i = 1:num_nodes
     % Carry out r.h.s. Bellman maximization:
     % passing over: objective, starting values for optimal consumption search, and
     % constraints: 4 empty, lower bound, upper bound, empty, options specified in main file
-    [consum_new,value_new] = fmincon(val_handle_u,consum(index),[],[],[],[],consum_min,production,[],options);
+    [consum_new,value_new] = fmincon(val_handle_u,5,[],[],[],[],consum_min,production,[],options);
     
     % save results of maximization step at present node
     consum(index) = consum_new;
