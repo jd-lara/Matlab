@@ -121,8 +121,8 @@ while strcmp (s(1:4),'-999') ~=1, %Detiene la lectura hasta llegar a -999
 
 %grabar la informacion de las maquinas y las cargas en los buses. 
 
-    S.Bus.Load(n,1) = (Pd+1i*Qd)/S.BaseMVA;	  
-    S.Bus.Generation(n,1) = (Pg+1i*Qg)/S.BaseMVA;
+    S.Bus.Load(n,1) = (Pd+1i*Qd);	  
+    S.Bus.Generation(n,1) = (Pg+1i*Qg);
       
 
 %obtiene la informacion de las tensiones de buses de la base de datos. 

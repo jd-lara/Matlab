@@ -1,7 +1,7 @@
 %Just hit play. 
 clear all ; close all;
 clc
-S=readcf('base_fig.cf'); %This Function ONLY reads the information stored on the *cf file 
+S=readcf('5bus_33v2.cf'); %This Function ONLY reads the information stored on the *cf file 
 S=bldybus(S); 
 bldpfloweqs(S)
 %bldlosseqs(S)
@@ -13,6 +13,7 @@ bldpfloweqs(S)
 % S.Bus.Generation(5,1)=1.8*S.Bus.Generation(5,1);
 L_exact=[]; P=[];
 S=pflow(S);
+
 pf=0.92;
 s=sin(acos(pf));
 n=0; m=0;

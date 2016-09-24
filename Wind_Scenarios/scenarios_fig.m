@@ -1,6 +1,7 @@
 %load scenarios.mat
 close all;
 %extend scenarios and ruc 
+%Realization = Original(:,1);
 kt=numel(Realization);
 
 scenarios_extended=zeros(100,kt);
@@ -24,6 +25,7 @@ for n=1:4
     end
 k=1;    
 end
+
 
 Realization=[Realization;Realization(1:2)];
 
